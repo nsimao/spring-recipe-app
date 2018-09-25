@@ -7,6 +7,7 @@ import javax.persistence.*;
  * @since 1.0
  */
 
+@Entity
 public class Notes {
 // ------------------------------ FIELDS ------------------------------
 
