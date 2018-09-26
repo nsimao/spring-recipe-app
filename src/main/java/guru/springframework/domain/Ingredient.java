@@ -22,6 +22,18 @@ public class Ingredient {
     @ManyToOne
     private Recipe recipe;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public Ingredient() {
+    }
+
+    public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom, Recipe recipe) {
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+        this.recipe = recipe;
+    }
+
 // --------------------- GETTER / SETTER METHODS ---------------------
 
     public BigDecimal getAmount() {
