@@ -108,10 +108,6 @@ public class Recipe {
         return notes;
     }
 
-    public void setNotes(Notes notes) {
-        this.notes = notes;
-    }
-
     public Integer getPrepTime() {
         return prepTime;
     }
@@ -142,5 +138,18 @@ public class Recipe {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Recipe addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
+    }
+
+    public void setNotes(Notes notes) {
+        this.notes = notes;
+        notes.setRecipe(this);
     }
 }
