@@ -13,4 +13,6 @@ public interface RecipeService {
 // -------------------------- OTHER METHODS --------------------------
 
     Set<Recipe> getRecipes();
+
+    Recipe findById(Long l);
 }
