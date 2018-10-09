@@ -1,6 +1,7 @@
-package guru.springframework.domain;
+package guru.springframework.commands;
 
-import javax.persistence.*;
+import guru.springframework.domain.Difficulty;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,12 +10,9 @@ import java.util.Set;
  * @since 1.0
  */
 
-@Entity
-public class Recipe {
+public class RecipeCommand {
 // ------------------------------ FIELDS ------------------------------
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
     private Integer prepTime;
@@ -22,29 +20,19 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
-    @Lob
     private String directions;
-    @Enumerated(value = EnumType.STRING)
+    private Set<IngredientCommand> ingredients = new HashSet<>();
     private Difficulty difficulty;
-    @Lob
-    private Byte[] image;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Notes notes;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredients = new HashSet<>();
-    @ManyToMany
-    @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
+    private NotesCommand notes;
+    private Set<CategoryCommand> categories = new HashSet<>();
 
 // --------------------- GETTER / SETTER METHODS ---------------------
 
-    public Set<Category> getCategories() {
+    public Set<CategoryCommand> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(Set<CategoryCommand> categories) {
         this.categories = categories;
     }
 
@@ -88,24 +76,20 @@ public class Recipe {
         this.id = id;
     }
 
-    public Byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(Byte[] image) {
-        this.image = image;
-    }
-
-    public Set<Ingredient> getIngredients() {
+    public Set<IngredientCommand> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
+    public void setIngredients(Set<IngredientCommand> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public Notes getNotes() {
+    public NotesCommand getNotes() {
         return notes;
+    }
+
+    public void setNotes(NotesCommand notes) {
+        this.notes = notes;
     }
 
     public Integer getPrepTime() {
@@ -138,19 +122,5 @@ public class Recipe {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-// -------------------------- OTHER METHODS --------------------------
-
-    public Recipe addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
-        this.ingredients.add(ingredient);
-        return this;
-    }
-
-    public void setNotes(Notes notes) {
-        this.notes = notes;
-        if (notes != null)
-            notes.setRecipe(this);
     }
 }
