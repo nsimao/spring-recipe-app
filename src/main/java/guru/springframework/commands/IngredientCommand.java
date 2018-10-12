@@ -11,6 +11,8 @@ public class IngredientCommand {
 // ------------------------------ FIELDS ------------------------------
 
     private Long id;
+    private Long recipeId;
+
     private String description;
     private BigDecimal amount;
     private UnitOfMeasureCommand uom;
@@ -39,6 +41,14 @@ public class IngredientCommand {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(Long recipeId) {
+        this.recipeId = recipeId;
     }
 
     public UnitOfMeasureCommand getUom() {

@@ -4,14 +4,20 @@ import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 /**
  * @author Nelson Simão
@@ -25,6 +31,9 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
+
+    private final String GUACA_IMAGE = "images/guacamole.jpg";
+    private final String TACO_IMAGE = "images/taco.jpg";
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
@@ -84,8 +93,14 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         Category americanCategory = americanCategoryOptional.get();
         Category mexicanCategory = mexicanCategoryOptional.get();
 
+
         // Yummy Guac
         Recipe guacRecipe = new Recipe();
+        try {
+            guacRecipe.setImage(loadImgFile(GUACA_IMAGE));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         guacRecipe.setDescription("Perfect Guacamole");
         guacRecipe.setPrepTime(10);
         guacRecipe.setCookTime(0);
@@ -134,6 +149,11 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
         //Yummy Tacos
         Recipe tacosRecipe = new Recipe();
+        try {
+            tacosRecipe.setImage(loadImgFile(TACO_IMAGE));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         tacosRecipe.setDescription("Spicy Grilled Chicken Taco");
         tacosRecipe.setCookTime(9);
         tacosRecipe.setPrepTime(20);
@@ -201,5 +221,13 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Byte[] loadImgFile(String imageFile) throws IOException {
+        InputStream resource = new ClassPathResource(imageFile).getInputStream();
+        byte[] fileByte = IOUtils.toByteArray(resource);
+        return toObject(fileByte);
     }
 }
