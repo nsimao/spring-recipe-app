@@ -6,6 +6,7 @@ import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,8 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
  */
 
 @Component
-public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
+@Profile("default")
+public class H2Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
 // ------------------------------ FIELDS ------------------------------
 
     private final CategoryRepository categoryRepository;
@@ -37,7 +39,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
-    public RecipeBootstrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public H2Bootstrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -220,6 +222,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        System.out.println("Loading H2 Bootstrap data...");
+
         recipeRepository.saveAll(getRecipes());
     }
 
